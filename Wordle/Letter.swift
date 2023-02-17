@@ -9,6 +9,7 @@ struct Letter: Hashable, Identifiable {
     var id: Int
     var character: Character
     var status: Status
+    var isShaking = false
     enum Status: Int, Comparable {
         static func < (lhs: Letter.Status, rhs: Letter.Status) -> Bool { lhs.rawValue < rhs.rawValue }
         case unguessed, wrong, wrongPosition, correct

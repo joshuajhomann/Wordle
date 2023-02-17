@@ -23,6 +23,10 @@
 		03402834297DC7A700BF1CAB /* GameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03402833297DC7A700BF1CAB /* GameViewModel.swift */; };
 		03402836297DC85E00BF1CAB /* AnchorToParentLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03402835297DC85E00BF1CAB /* AnchorToParentLayout.swift */; };
 		03402838297DC89300BF1CAB /* CGSize+AspectRatio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03402837297DC89300BF1CAB /* CGSize+AspectRatio.swift */; };
+		03D12EBF2998167600808977 /* Stack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D12EBE2998167600808977 /* Stack.swift */; };
+		03D12EC1299819C000808977 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D12EC0299819C000808977 /* Game.swift */; };
+		03D12EC329981D6600808977 /* Publisher+ScanMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D12EC229981D6600808977 /* Publisher+ScanMap.swift */; };
+		03D12EC52998221200808977 /* Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D12EC42998221200808977 /* Animations.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +66,10 @@
 		03402833297DC7A700BF1CAB /* GameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewModel.swift; sourceTree = "<group>"; };
 		03402835297DC85E00BF1CAB /* AnchorToParentLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnchorToParentLayout.swift; sourceTree = "<group>"; };
 		03402837297DC89300BF1CAB /* CGSize+AspectRatio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGSize+AspectRatio.swift"; sourceTree = "<group>"; };
+		03D12EBE2998167600808977 /* Stack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stack.swift; sourceTree = "<group>"; };
+		03D12EC0299819C000808977 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
+		03D12EC229981D6600808977 /* Publisher+ScanMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+ScanMap.swift"; sourceTree = "<group>"; };
+		03D12EC42998221200808977 /* Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animations.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,19 +120,23 @@
 		0332A934296A2B9D0012D8C7 /* Wordle */ = {
 			isa = PBXGroup;
 			children = (
-				0332A935296A2B9D0012D8C7 /* WordleApp.swift */,
-				0332A937296A2B9D0012D8C7 /* GameView.swift */,
 				03402835297DC85E00BF1CAB /* AnchorToParentLayout.swift */,
-				03402833297DC7A700BF1CAB /* GameViewModel.swift */,
-				03402831297DC77A00BF1CAB /* With.swift */,
 				0340282F297DC76200BF1CAB /* Color+Wordle.swift */,
-				0340282D297DC74B00BF1CAB /* Row.swift */,
+				03402837297DC89300BF1CAB /* CGSize+AspectRatio.swift */,
+				0332A937296A2B9D0012D8C7 /* GameView.swift */,
+				03D12EBE2998167600808977 /* Stack.swift */,
+				03402833297DC7A700BF1CAB /* GameViewModel.swift */,
+				03D12EC229981D6600808977 /* Publisher+ScanMap.swift */,
 				03402829297DC61B00BF1CAB /* LetterView.swift */,
 				0340282B297DC72700BF1CAB /* Letter.swift */,
-				03402837297DC89300BF1CAB /* CGSize+AspectRatio.swift */,
+				0340282D297DC74B00BF1CAB /* Row.swift */,
+				03402831297DC77A00BF1CAB /* With.swift */,
+				0332A935296A2B9D0012D8C7 /* WordleApp.swift */,
 				0332A939296A2B9E0012D8C7 /* Assets.xcassets */,
 				03402827297C4D5B00BF1CAB /* words.json */,
 				0332A93B296A2B9E0012D8C7 /* Preview Content */,
+				03D12EC0299819C000808977 /* Game.swift */,
+				03D12EC42998221200808977 /* Animations.swift */,
 			);
 			path = Wordle;
 			sourceTree = "<group>";
@@ -290,11 +302,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				03402838297DC89300BF1CAB /* CGSize+AspectRatio.swift in Sources */,
+				03D12EC329981D6600808977 /* Publisher+ScanMap.swift in Sources */,
 				03402830297DC76200BF1CAB /* Color+Wordle.swift in Sources */,
 				0332A938296A2B9D0012D8C7 /* GameView.swift in Sources */,
 				0340282A297DC61B00BF1CAB /* LetterView.swift in Sources */,
 				03402832297DC77A00BF1CAB /* With.swift in Sources */,
+				03D12EC52998221200808977 /* Animations.swift in Sources */,
+				03D12EBF2998167600808977 /* Stack.swift in Sources */,
 				03402834297DC7A700BF1CAB /* GameViewModel.swift in Sources */,
+				03D12EC1299819C000808977 /* Game.swift in Sources */,
 				03402836297DC85E00BF1CAB /* AnchorToParentLayout.swift in Sources */,
 				0332A936296A2B9D0012D8C7 /* WordleApp.swift in Sources */,
 				0340282E297DC74B00BF1CAB /* Row.swift in Sources */,

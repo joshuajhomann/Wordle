@@ -9,8 +9,10 @@ import Foundation
 
 @MainActor
 final class GameViewModel: ObservableObject {
+    typealias Action = Game.Action
     @Published private(set) var words: [Row] = []
     @Published private(set) var keys: [Row] = []
+    let transactions: any Publisher<Game.Transaction, Never>
 
     let perform: (Action) -> Void
 
@@ -24,40 +26,27 @@ final class GameViewModel: ObservableObject {
 
         let fiveLetterWords = Set<String>(allWords.lazy.filter { $0.count == 5 })
         let makeWord = { fiveLetterWords.randomElement() ?? "swift" }
+        let game = Game()
 
-        let state = actionSubject
-            .scan(State(targetWord: makeWord())) { state, action in
-                switch action {
-                case let .tap(character):
-                    guard state.currentWord.count < 5 && state.isPlaying else { return state }
-                    return with(state) { $0.currentWord.append(character.lowercased()) }
-                case .submitWord:
-                    guard state.isPlaying && state.currentWord.count == 5 && fiveLetterWords.contains(state.currentWord) else { return state }
-                    return with(state) { state in
-                        state.guess = zip(
-                            state.currentWord,
-                            Letter.Status.make(for: state.currentWord, target: state.targetWord)
-                        )
-                        .reduce(into: state.guess) { accumulated, next in
-                            let (letter, status) = next
-                            accumulated[letter] = accumulated[letter].map { max($0, status) } ?? status
-                        }
-                        state.guessedWords.append(state.currentWord)
-                        if state.guessedWords.count == 6 || state.currentWord == state.targetWord {
-                            state.isPlaying = false
-                        }
-                        state.currentWord = ""
-                    }
-                case .delete:
-                    guard !state.currentWord.isEmpty && state.isPlaying else { return state }
-                    return with(state) { $0.currentWord = String($0.currentWord.dropLast()) }
-                case .reset: return State(targetWord: makeWord())
+        let allTransactions = actionSubject
+            .scanMap(state: game) { game, action in
+                game.reduce(action: action)
+            }
+            .share()
+
+        transactions = allTransactions
+            .filter { transaction in
+                switch transaction {
+                case .immediate: return false
+                default: return true
                 }
             }
-            .removeDuplicates()
-            .handleEvents(receiveOutput: { print($0) })
-            .multicast { CurrentValueSubject(State(targetWord: makeWord())) }
-            .autoconnect()
+
+        let state = allTransactions
+            .compactMap { transaction -> Game.State? in
+                guard case let .immediate(state) = transaction else { return nil }
+                return state
+            }
 
         state
             .map { state in
@@ -80,7 +69,8 @@ final class GameViewModel: ObservableObject {
                                 return Letter(
                                     id: word.offset * 10 + index,
                                     character: letter,
-                                    status: word.offset - currentWordIndex >= 0 ? .unguessed : status
+                                    status: word.offset - currentWordIndex >= 0 ? .unguessed : status,
+                                    isShaking: word.offset == currentWordIndex ? state.shakeCurrentWord : false
                                 )
                             }
                         )
@@ -104,22 +94,9 @@ final class GameViewModel: ObservableObject {
                     )
                 }
         }.assign(to: &$keys)
+
+        actionSubject.send(.reset)
     }
 }
 
 
-extension GameViewModel {
-    enum Action {
-        case tap(Character), submitWord, delete, reset
-    }
-    enum Transaction {
-        case shake, flip(State)
-    }
-    struct State: Equatable {
-        var targetWord: String
-        var currentWord = ""
-        var guessedWords: [String] = []
-        var isPlaying = true
-        var guess: [Character: Letter.Status] = [:]
-    }
-}

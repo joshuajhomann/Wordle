@@ -17,19 +17,10 @@ struct GameView: View {
                 let maxKeySize: CGFloat = sizeClass == .regular ? 60 : 30
                 let scaledMaxKeySize = isVertical ? maxKeySize : 24 * max(reader.size.width / 600, 1)
                 let keyWidth = max(min(scaledMaxKeySize, (reader.size.width - (8.0 * 9.0)) / 10.0), 10)
-                if isVertical{
-                    VStack(spacing: 36) {
-                        board(keyWidth: keyWidth)
-                    }
+                Stack(isVertical: isVertical, spacing: 36) { board(keyWidth: keyWidth) }
+                    .animation(.default, value: isVertical)
                     .padding()
                     .centerInParent()
-                } else {
-                    HStack(spacing: 36) {
-                        board(keyWidth: keyWidth)
-                    }
-                    .padding()
-                    .centerInParent()
-                }
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -43,6 +34,19 @@ struct GameView: View {
                 }
             }
         }
+        .task {
+            for await transaction in viewModel.transactions.eraseToAnyPublisher().values {
+                switch transaction {
+                case let .shake(animated, notAnimated):
+                    withAnimation(.linear(duration: 0.25)) {
+                        viewModel.perform(.apply(animated))
+                    }
+                    try? await Task.sleep(until: .now.advanced(by: .milliseconds(250)), clock: .continuous)
+                    viewModel.perform(.apply(notAnimated))
+                default: break
+                }
+            }
+        }
     }
     @ViewBuilder func board(keyWidth: CGFloat) -> some View {
         Grid(alignment: .topLeading, horizontalSpacing: 12, verticalSpacing: 12) {
@@ -50,6 +54,10 @@ struct GameView: View {
                 GridRow {
                     ForEach(row.letters) { letter in
                         LetterView(style: .word(letter))
+                            .horizontalShakeAnimation(
+                                proportion: letter.isShaking ? 1 : 0,
+                                distance: 6
+                            )
                     }
                 }
             }
